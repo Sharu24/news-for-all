@@ -9,8 +9,10 @@ import News from "./components/News";
 import Article from "./components/Article";
 
 function App() {
-  const apiKey = "18703339b00d4508b2af2b8109a35c61";
+  const apiKey = "0ca53f93621b4e0cb60b865c677ad37e";
   const [news, setNews] = useState([]);
+  const [randomNews, setRandomNews] = useState([]);
+  const [editorsNews, setEditorsNews] = useState([]);
   const [pageSize, setPageSize] = useState(9);
   const [searchText, setSearchText] = useState("");
   const [country, setCountry] = useState("");
@@ -19,17 +21,24 @@ function App() {
   const [article, setArticle] = useState(null);
 
   const getNews = async () => {
-    const url = `https://newsapi.org/v2/top-headlines?country=us&pageSize=${pageSize}&apiKey=${apiKey}`;
-    //const urlRandom = `https://newsapi.org/v2/everything?language=en&domains=%27bbc.co.uk,%20techcrunch.com,%20engadget.com%27&sortBy=popularity&pageSize=${pageSize}&apiKey=${apiKey}`;
-    const res = await axios.get(url);
-    console.log(res.data.articles.length);
-    setNews(res.data.articles);
+    const url = `https://newsapi.org/v2/top-headlines?language=en&pageSize=${pageSize}&apiKey=${apiKey}`;
+    const urlRandom = `https://newsapi.org/v2/everything?language=en&q=random&pageSize=${pageSize}&apiKey=${apiKey}`;
+    const urlPicks = `https://newsapi.org/v2/everything?language=en&domains=%27bbc.co.uk,%20techcrunch.com,%20engadget.com%27&sortBy=popularity&pageSize=${pageSize}&apiKey=${apiKey}`;
+
+    const resNews = await axios.get(url);
+    const resRandomNews = await axios.get(urlRandom);
+    const resEditorsNews = await axios.get(urlPicks);
+    console.log(resNews.data.articles.length);
+    setNews(resNews.data.articles);
+    setRandomNews(resRandomNews.data.articles);
+    setEditorsNews(resEditorsNews.data.articles);
   };
 
   const getNewsByFilter = async () => {
     if (!searchText && !country && !category && !source) {
       getNews();
     } else if (searchText) {
+      console.log("hello, ", searchText);
       const url = `https://newsapi.org/v2/everything?q='${searchText}'&apiKey=${apiKey}`;
       const res = await axios.get(url);
       setNews(res.data.articles);
@@ -91,7 +100,12 @@ function App() {
                 setSource={setSource}
               />
               {news && news.length > 0 && (
-                <News news={news} setArticle={setArticle} />
+                <News
+                  news={news}
+                  setArticle={setArticle}
+                  randomNews={randomNews}
+                  editorsNews={editorsNews}
+                />
               )}
             </React.Fragment>
           )}

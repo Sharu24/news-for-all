@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Container, Row, Col, Carousel } from "react-bootstrap";
 
-export default function News({ news, setArticle }) {
+export default function News({ news, setArticle, randomNews, editorsNews }) {
   return (
     <React.Fragment>
       <Container>
@@ -30,7 +30,8 @@ export default function News({ news, setArticle }) {
             </Carousel.Item>
           ))}
         </Carousel>
-        <br/>
+        <br />
+
         <Row>
           {news.map((article, index) => (
             <Col key={index} xs={12} sm={12} md={6} lg={4}>
@@ -55,6 +56,71 @@ export default function News({ news, setArticle }) {
               </Card>
             </Col>
           ))}
+        </Row>
+
+        <hr />
+        <Card className="text-center text-white bg-dark m-4">
+          <h2>~ Top Picks ~</h2>
+        </Card>
+        <Row>
+          <Col style={{ width: "200px" }} className="text-center">
+            <h2 className="mb-4">Random News</h2>
+            {randomNews.map((article, index) => (
+              <Col>
+                <Card
+                  as="a"
+                  className="m-2 text-white"
+                  onClick={() => setArticle(article)}
+                  style={{
+                    cursor: "pointer",
+                    textDecoration: "none"
+                  }}
+                >
+                  <Card.Img
+                    variant="top"
+                    src={article.urlToImage}
+                    style={{ height: "12rem" }}
+                  />
+                  <Card.Body className="bg-dark">
+                    <Card.Title>{article.author}</Card.Title>
+                    <Card.Text>{article.title}</Card.Text>
+                  </Card.Body>
+                  <Card.Footer className="bg-dark">
+                    <small className="text-muted">{article.publishedAt}</small>
+                  </Card.Footer>
+                </Card>
+              </Col>
+            ))}
+          </Col>
+          <Col style={{ width: "200px" }} className="text-center">
+            <h2 className="mb-4">Editors Choice</h2>
+            {editorsNews.map((article, index) => (
+              <Col>
+                <Card
+                  as="a"
+                  className="m-2 text-white"
+                  onClick={() => setArticle(article)}
+                  style={{
+                    cursor: "pointer",
+                    textDecoration: "none"
+                  }}
+                >
+                  <Card.Img
+                    variant="top"
+                    src={article.urlToImage}
+                    style={{ height: "12rem" }}
+                  />
+                  <Card.Body className="bg-dark">
+                    <Card.Title>{article.author}</Card.Title>
+                    <Card.Text>{article.title}</Card.Text>
+                  </Card.Body>
+                  <Card.Footer className="bg-dark">
+                    <small className="text-muted">{article.publishedAt}</small>
+                  </Card.Footer>
+                </Card>
+              </Col>
+            ))}
+          </Col>
         </Row>
       </Container>
     </React.Fragment>
